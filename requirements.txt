@@ -1,0 +1,20 @@
+# Trafik Nesne Tespiti + Sayma — bagimliliklar
+# Kurulum: python -m pip install -r requirements.txt
+
+# Tespit + takip
+ultralytics          # YOLOv8 + ByteTrack
+
+# Goruntu / video isleme
+opencv-python
+numpy
+Pillow
+imageio
+imageio-ffmpeg       # cikti videosunu H264 yazmak icin (ffmpeg saglar)
+
+# Demo arayuzu
+streamlit
+streamlit-image-coordinates   # sayim cizgisini tiklayarak koymak icin
+
+# Veri kesfi scriptleri (1_kesif, 1b_etiket_kontrol)
+matplotlib
+PyYAML

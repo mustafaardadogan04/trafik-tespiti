@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Editör / Claude Code
+.vscode/
+.idea/
+.claude/
+CLAUDE.md
+
+# Eğitilmiş model ağırlıkları (büyük; koddan yeniden eğitilebilir)
+*.pt
+*.pth
+model/
+
+# Videolar (büyük; demo kendi yüklemenle de çalışır)
+*.mp4
+*.avi
+*.mov
+videolar/
+ornek_videolar/
+
+# Veri setleri (GB'larca; kaynakları README'de)
+archive/
+birlesik/
+mio_yolo/
+_genel_extract/
+MIO-TCD*/
+
+# Eğitim/deney çıktıları
+runs/
+
+# Üretilen çıktılar — vitrin görselleri ve eğitim kanıtları hariç hepsi dışarıda
+ciktilar/*
+!ciktilar/class_dagilimi.png
+!ciktilar/ornek_goruntuler.png
+!ciktilar/sayim_kare.png
+!ciktilar/egitim_egrileri.png
+!ciktilar/confusion_matrix.png
+!ciktilar/demo.gif
+
+# İşletim sistemi
+Thumbs.db
+.DS_Store
