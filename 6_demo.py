@@ -336,7 +336,7 @@ def en_iyi_imgsz_gorsel(goruntu):
 st.set_page_config(page_title="Trafik Tespiti · Traffic Detection", page_icon="🚦", layout="wide")
 
 # --- Dil secimi (tum arayuz metinleri T uzerinden gelir) --------------------
-dil = st.sidebar.radio("🌐 Dil / Language", ["Türkçe", "English"], horizontal=True)
+dil = st.sidebar.selectbox("🌐 Dil / Language", ["Türkçe", "English"])
 T = METIN["tr" if dil == "Türkçe" else "en"]
 
 st.title(T["baslik"])
