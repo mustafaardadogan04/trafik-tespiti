@@ -94,7 +94,7 @@ pip install -r requirements.txt
 streamlit run 7_demo.py
 ```
 
-Model ağırlıkları (`model/genel_best.pt`, ~22 MB) ve veri setleri repoya konmadı; model `5_genel_egitim.py` ile yeniden eğitilebilir (istenirse paylaşırım). Demo, ağırlık dosyasını `model/` klasöründe arar ve yoksa açık bir mesajla söyler.
+Model ağırlığı (`genel_best.pt`, ~22 MB) repoda değil, [GitHub Release'te](https://github.com/mustafaardadogan04/trafik-tespiti/releases) — demo ilk çalıştırmada otomatik indirir, senin bir şey yapman gerekmez. Veri setleri de repoya konmadı (kaynaklar yukarıda); model `5_genel_egitim.py` ile yeniden eğitilebilir.
 
 Örnek video da repoda yok — demo kendi videonu yüklemenle çalışır (mp4/avi/mov). Yukarıdan/açılı çekilmiş yol videoları en iyi sonucu verir.
 

@@ -22,6 +22,7 @@ Tiklayarak cizim icin: pip install streamlit-image-coordinates
 import os
 import tempfile
 import time
+import urllib.request
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -40,6 +41,8 @@ except ImportError:
 
 KOK = Path(__file__).parent
 MODEL = KOK / "model" / "genel_best.pt"
+MODEL_URL = ("https://github.com/mustafaardadogan04/trafik-tespiti"
+             "/releases/download/v1.0/genel_best.pt")
 TAKIP = KOK / "bytetrack_takip.yaml"   # track_buffer buyutulmus config
 ORNEK = KOK / "ornekler"
 ORNEK_VID = KOK / "ornek_videolar"
@@ -50,7 +53,17 @@ RENK = {0: (230, 80, 80), 1: (30, 120, 230), 2: (230, 150, 30),
 
 @st.cache_resource
 def model_yukle():
-    return YOLO(str(MODEL)) if MODEL.exists() else None
+    if not MODEL.exists():
+        # agirlik repoda yok (buyuk dosya) — ilk calistirmada Release'ten indirilir
+        try:
+            MODEL.parent.mkdir(exist_ok=True)
+            with st.spinner("Model ilk kez indiriliyor (~22 MB)..."):
+                urllib.request.urlretrieve(MODEL_URL, MODEL)
+        except Exception:
+            if MODEL.exists():
+                MODEL.unlink()   # yarim kalan dosya sonraki denemeyi bozmasin
+            return None
+    return YOLO(str(MODEL))
 
 
 @st.cache_data(show_spinner=False)
@@ -150,8 +163,9 @@ st.caption("YOLOv8 · çok-açılı veriyle (MIO-TCD + Street View, ~18k görün
 
 model = model_yukle()
 if model is None:
-    st.error(f"Model bulunamadı: `{MODEL}`. Eğitilmiş `genel_best.pt` dosyasını "
-             "`model/` klasörüne koy (repoya dahil değil, koddan yeniden eğitilebilir).")
+    st.error("Model yüklenemedi ve otomatik indirme başarısız oldu — internet bağlantısını "
+             f"kontrol et. Elle kurulum: [`genel_best.pt`]({MODEL_URL}) dosyasını indirip "
+             "`model/` klasörüne koy.")
     st.stop()
 
 # --- Ayarlar (kenar cubugu) -----------------------------------------------
