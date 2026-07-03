@@ -16,7 +16,7 @@ Calistirma:
   - Yerelde: python 5_genel_egitim.py <data.yaml yolu>
 
 Egitim bitince runs/detect/genel/weights/best.pt dosyasini
-model/genel_best.pt olarak kopyala — demo (7_demo.py) onu arar.
+model/genel_best.pt olarak kopyala — demo (6_demo.py) onu arar.
 """
 
 import glob

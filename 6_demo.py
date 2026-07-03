@@ -1,5 +1,5 @@
 """
-Adim 7 — Streamlit demo (goruntu + video).
+Adim 6 — Streamlit demo (goruntu + video). Arayuz Turkce/Ingilizce.
 
 Sade akis:
 - Goruntu modu: ornek sec ya da yukle -> tespit + sayim
@@ -14,8 +14,9 @@ Sade akis:
 - Ayarlar: guven esigi + kirpma + cizgi videodan otomatik cikarilir (3 cikarim);
   imgsz Isle'ye basinca secilir. Istege bagli elle ayar. Isleme hizi secilebilir
   (kare atlama), ilerleme cubugunda tahmini kalan sure gosterilir.
+- Dil: kenar cubugundaki 🌐 secimi tum arayuz metnini degistirir (METIN sozlugu).
 
-Calistirma:            py -3.12 -m streamlit run 7_demo.py
+Calistirma:            py -3.12 -m streamlit run 6_demo.py
 Tiklayarak cizim icin: pip install streamlit-image-coordinates
 """
 
@@ -50,6 +51,182 @@ SINIFLAR = ["bicycle", "bus", "car", "motorbike", "person"]
 RENK = {0: (230, 80, 80), 1: (30, 120, 230), 2: (230, 150, 30),
         3: (30, 200, 120), 4: (180, 80, 230)}  # BGR
 
+# --- Arayuz metinleri (tr/en) ------------------------------------------------
+METIN = {
+    "tr": {
+        "baslik": "🚦 Trafik Nesne Tespiti + Sayma",
+        "alt": "YOLOv8 · çok-açılı veriyle (MIO-TCD + Street View, ~18k görüntü) eğitildi. "
+               "Sınıflar: bicycle, bus, car, motorbike, person.",
+        "model_hata": "Model yüklenemedi ve otomatik indirme başarısız oldu — internet "
+                      "bağlantısını kontrol et. Elle kurulum: [`genel_best.pt`]({url}) "
+                      "dosyasını indirip `model/` klasörüne koy.",
+        "ayarlar": "Ayarlar",
+        "oto_ayar": "Ayarları otomatik seç",
+        "oto_ayar_help": "Açıkken çözünürlük (imgsz) ve güven eşiği videoya göre otomatik "
+                         "seçilir. Kapatırsan ikisini de elle ayarlarsın.",
+        "oto_cap": "⚙️ imgsz ve güven eşiği otomatik.",
+        "imgsz": "Çözünürlük (imgsz)",
+        "guven": "Güven eşiği",
+        "manuel_cap": "Küçük/uzak nesne varsa imgsz'yi artır. CPU'da büyük değer yavaştır.",
+        "mod": "Mod",
+        "mod_goruntu": "📷 Görüntü",
+        "mod_video": "🎬 Video (takip + sayma)",
+        "ornek_sec": "Örnek seç",
+        "kendi_goruntu": "(Kendi görüntümü yükle)",
+        "goruntu_yukle": "veya bir görüntü yükle",
+        "tespit_spinner": "Tespit ediliyor...",
+        "oto_lbl": "⚙️ Otomatik",
+        "man_lbl": "✋ Manuel",
+        "ayar_cap": "{lbl} → çözünürlük {imgsz} · güven {conf}",
+        "tespit_sonuc": "Tespit sonucu",
+        "sayim": "Sayım",
+        "toplam_nesne": "Toplam nesne",
+        "ornek_ya_yukle": "Bir örnek seç ya da görüntü yükle.",
+        "video_cap": "Yukarıdan/açılı yol trafik videosu en iyi sonucu verir. "
+                     "⚠️ CPU'da işlem birkaç dakika sürebilir.",
+        "ornek_video_sec": "Örnek video seç",
+        "kendi_video": "(Kendi videomu yükle)",
+        "video_yukle": "veya video yükle (mp4 / avi / mov)",
+        "cizgi_kullan": "Sayım çizgisi kullan",
+        "cizgi_kullan_help": "Kapatırsan çizgi çizilmez; model sadece tespit + takip yapıp "
+                             "benzersiz nesneleri sayar.",
+        "iki_kaynak": "ℹ️ Hem örnek seçili hem video yüklü — **yüklenen video** kullanılıyor.",
+        "video_analiz": "Video analiz ediliyor...",
+        "oto_video_cap": "⚙️ Otomatik → güven {conf} · üst kırpma {kirp} "
+                         "(çözünürlük İşle'ye basınca seçilir)",
+        "man_video_cap": "✋ Manuel → çözünürlük {imgsz} · güven {conf} (kırpma yok)",
+        "cizgi_oto": "Çizgiyi otomatik yerleştir (önerilen)",
+        "cizgi_oto_help": "En yoğun trafiğin olduğu yere yatay çizgi koyar. Kapatırsan "
+                          "çizgiyi elle koyabilirsin.",
+        "cizgi_bul": "En iyi çizgi konumu bulunuyor...",
+        "cizgi_onizle": "Otomatik çizgi — istersen üstteki kutuyu kapatıp elle koy",
+        "tikla_cap": "👉 Kare üstünde **iki noktaya tıkla**: 1. başlangıç, 2. bitiş "
+                     "(yatay/dikey/eğik). Yeniden koymak için 🗑 Sıfırla.",
+        "sifirla": "🗑 Çizgiyi sıfırla",
+        "cizgi_ok": "Çizgi ayarlandı ✔ — İşle'ye basabilirsin.",
+        "nokta_bilgi": "{n}/2 nokta seçildi. Seçmezsen ortadan yatay çizgi kullanılır.",
+        "tikla_uyari": "Elle çizim için: `pip install streamlit-image-coordinates`. "
+                       "Şimdilik kaydırıcı kullanılıyor.",
+        "cizgi_yon": "Çizgi yönü",
+        "yatay": "Yatay",
+        "dikey": "Dikey",
+        "cizgi_konum": "Çizgi konumu",
+        "onizleme": "Önizleme",
+        "islem_hizi": "İşleme hızı",
+        "hiz_hizli": "🐇 Hızlı (2 karede 1) — önerilen",
+        "hiz_tam": "🐢 Tam (her kare)",
+        "hiz_cok": "⚡ Çok hızlı (3 karede 1)",
+        "hiz_cap": "Kare atlama süreyi o oranda kısaltır; takip tamponu geniş olduğu "
+                   "için sayım doğruluğu pek etkilenmez.",
+        "isle": "▶ İşle ve say",
+        "imgsz_spinner": "En uygun çözünürlük seçiliyor (video başına bir kez)...",
+        "secilen_imgsz": "⚙️ Seçilen çözünürlük: {imgsz}",
+        "kirp_bilgi": "ℹ️ Üst kırpma, sayım çizgisi görünür kalsın diye {oran:.2f} oranına çekildi.",
+        "yazici_hata": "Video yazıcı açılamadı (ffmpeg gerekli): `pip install imageio-ffmpeg`\n\n{e}",
+        "progress_ilk": "İşleniyor... (sonuç işlem bitince gösterilecek)",
+        "progress": "İşleniyor... {i}/{n} kare · kalan ~{k} sn",
+        "progress_belirsiz": "İşleniyor... {i}. kare (toplam bilinmiyor)",
+        "bitti": "Bitti",
+        "ov_gecen": "GECEN",
+        "ov_toplam": "TOPLAM",
+        "ov_alt": "(gecen / toplam)",
+        "sonuc_cizgi": "✅ Çizgiden geçen: {g}  ·  Görülen toplam (benzersiz): {t}",
+        "gecen_md": "**Çizgiden geçen**",
+        "gecen_lbl": "Geçen",
+        "yon_cap": "↕ Yön ayrımı: bir yönden **{y1}** · karşı yönden **{y2}**",
+        "toplam_md": "**Toplam görülen (benzersiz)**",
+        "toplam_lbl": "Toplam",
+        "sonuc_toplam": "✅ Toplam görülen (benzersiz): {t}",
+        "indir": "📥 Sonuç videosunu indir",
+    },
+    "en": {
+        "baslik": "🚦 Traffic Object Detection + Counting",
+        "alt": "YOLOv8 · trained on a multi-angle dataset (MIO-TCD + Street View, ~18k images). "
+               "Classes: bicycle, bus, car, motorbike, person.",
+        "model_hata": "Model could not be loaded and auto-download failed — check your "
+                      "internet connection. Manual setup: download [`genel_best.pt`]({url}) "
+                      "and place it in the `model/` folder.",
+        "ayarlar": "Settings",
+        "oto_ayar": "Auto-select settings",
+        "oto_ayar_help": "When on, resolution (imgsz) and confidence threshold are picked "
+                         "automatically from the video. Turn off to set both manually.",
+        "oto_cap": "⚙️ imgsz and confidence are automatic.",
+        "imgsz": "Resolution (imgsz)",
+        "guven": "Confidence threshold",
+        "manuel_cap": "Increase imgsz for small/far objects. Large values are slow on CPU.",
+        "mod": "Mode",
+        "mod_goruntu": "📷 Image",
+        "mod_video": "🎬 Video (tracking + counting)",
+        "ornek_sec": "Pick a sample",
+        "kendi_goruntu": "(Upload my own image)",
+        "goruntu_yukle": "or upload an image",
+        "tespit_spinner": "Detecting...",
+        "oto_lbl": "⚙️ Auto",
+        "man_lbl": "✋ Manual",
+        "ayar_cap": "{lbl} → resolution {imgsz} · confidence {conf}",
+        "tespit_sonuc": "Detection result",
+        "sayim": "Counts",
+        "toplam_nesne": "Total objects",
+        "ornek_ya_yukle": "Pick a sample or upload an image.",
+        "video_cap": "Top-down / angled road traffic videos work best. "
+                     "⚠️ Processing may take a few minutes on CPU.",
+        "ornek_video_sec": "Pick a sample video",
+        "kendi_video": "(Upload my own video)",
+        "video_yukle": "or upload a video (mp4 / avi / mov)",
+        "cizgi_kullan": "Use counting line",
+        "cizgi_kullan_help": "If off, no line is drawn; the model only detects + tracks "
+                             "and counts unique objects.",
+        "iki_kaynak": "ℹ️ Both a sample and an upload are set — the **uploaded video** is used.",
+        "video_analiz": "Analyzing video...",
+        "oto_video_cap": "⚙️ Auto → confidence {conf} · top crop {kirp} "
+                         "(resolution is picked when you press Process)",
+        "man_video_cap": "✋ Manual → resolution {imgsz} · confidence {conf} (no crop)",
+        "cizgi_oto": "Place the line automatically (recommended)",
+        "cizgi_oto_help": "Puts a horizontal line where traffic is densest. Turn off to "
+                          "place the line yourself.",
+        "cizgi_bul": "Finding the best line position...",
+        "cizgi_onizle": "Automatic line — turn off the box above to place it manually",
+        "tikla_cap": "👉 **Click two points** on the frame: 1st start, 2nd end "
+                     "(horizontal/vertical/diagonal). Use 🗑 Reset to redo.",
+        "sifirla": "🗑 Reset line",
+        "cizgi_ok": "Line set ✔ — you can press Process.",
+        "nokta_bilgi": "{n}/2 points selected. If you skip, a horizontal mid-line is used.",
+        "tikla_uyari": "For click-to-draw: `pip install streamlit-image-coordinates`. "
+                       "Using a slider for now.",
+        "cizgi_yon": "Line direction",
+        "yatay": "Horizontal",
+        "dikey": "Vertical",
+        "cizgi_konum": "Line position",
+        "onizleme": "Preview",
+        "islem_hizi": "Processing speed",
+        "hiz_hizli": "🐇 Fast (every 2nd frame) — recommended",
+        "hiz_tam": "🐢 Full (every frame)",
+        "hiz_cok": "⚡ Very fast (every 3rd frame)",
+        "hiz_cap": "Frame skipping shortens processing proportionally; the wide tracking "
+                   "buffer keeps counting accuracy mostly unaffected.",
+        "isle": "▶ Process and count",
+        "imgsz_spinner": "Picking the best resolution (once per video)...",
+        "secilen_imgsz": "⚙️ Selected resolution: {imgsz}",
+        "kirp_bilgi": "ℹ️ Top crop pulled up to {oran:.2f} so the counting line stays visible.",
+        "yazici_hata": "Video writer failed (ffmpeg required): `pip install imageio-ffmpeg`\n\n{e}",
+        "progress_ilk": "Processing... (results will appear when done)",
+        "progress": "Processing... {i}/{n} frames · ~{k} s left",
+        "progress_belirsiz": "Processing... frame {i} (total unknown)",
+        "bitti": "Done",
+        "ov_gecen": "CROSSED",
+        "ov_toplam": "TOTAL",
+        "ov_alt": "(crossed / total)",
+        "sonuc_cizgi": "✅ Crossed the line: {g}  ·  Total unique seen: {t}",
+        "gecen_md": "**Crossed the line**",
+        "gecen_lbl": "Crossed",
+        "yon_cap": "↕ Direction split: **{y1}** one way · **{y2}** the other",
+        "toplam_md": "**Total unique seen**",
+        "toplam_lbl": "Total",
+        "sonuc_toplam": "✅ Total unique seen: {t}",
+        "indir": "📥 Download result video",
+    },
+}
+
 
 @st.cache_resource
 def model_yukle():
@@ -57,7 +234,7 @@ def model_yukle():
         # agirlik repoda yok (buyuk dosya) — ilk calistirmada Release'ten indirilir
         try:
             MODEL.parent.mkdir(exist_ok=True)
-            with st.spinner("Model ilk kez indiriliyor (~22 MB)..."):
+            with st.spinner("Model indiriliyor / downloading (~22 MB)..."):
                 urllib.request.urlretrieve(MODEL_URL, MODEL)
         except Exception:
             if MODEL.exists():
@@ -156,89 +333,85 @@ def en_iyi_imgsz_gorsel(goruntu):
     return en_iyi_imgsz(goruntu)
 
 
-st.set_page_config(page_title="Trafik Nesne Tespiti", page_icon="🚦", layout="wide")
-st.title("🚦 Trafik Nesne Tespiti + Sayma")
-st.caption("YOLOv8 · çok-açılı veriyle (MIO-TCD + Street View, ~18k görüntü) eğitildi. "
-           "Sınıflar: bicycle, bus, car, motorbike, person.")
+st.set_page_config(page_title="Trafik Tespiti · Traffic Detection", page_icon="🚦", layout="wide")
+
+# --- Dil secimi (tum arayuz metinleri T uzerinden gelir) --------------------
+dil = st.sidebar.radio("🌐 Dil / Language", ["Türkçe", "English"], horizontal=True)
+T = METIN["tr" if dil == "Türkçe" else "en"]
+
+st.title(T["baslik"])
+st.caption(T["alt"])
 
 model = model_yukle()
 if model is None:
-    st.error("Model yüklenemedi ve otomatik indirme başarısız oldu — internet bağlantısını "
-             f"kontrol et. Elle kurulum: [`genel_best.pt`]({MODEL_URL}) dosyasını indirip "
-             "`model/` klasörüne koy.")
+    st.error(T["model_hata"].format(url=MODEL_URL))
     st.stop()
 
 # --- Ayarlar (kenar cubugu) -----------------------------------------------
-st.sidebar.header("Ayarlar")
-oto_ayar_ac = st.sidebar.checkbox(
-    "Ayarları otomatik seç", value=True,
-    help="Açıkken çözünürlük (imgsz) ve güven eşiği videoya göre otomatik seçilir. "
-         "Kapatırsan ikisini de elle ayarlarsın.")
+st.sidebar.header(T["ayarlar"])
+oto_ayar_ac = st.sidebar.checkbox(T["oto_ayar"], value=True, help=T["oto_ayar_help"])
 if oto_ayar_ac:
-    st.sidebar.caption("⚙️ imgsz ve güven eşiği otomatik.")
+    st.sidebar.caption(T["oto_cap"])
     imgsz_manuel, conf_manuel = 1280, 0.25
 else:
-    imgsz_manuel = st.sidebar.select_slider("Çözünürlük (imgsz)", [640, 960, 1280, 1920, 2560], value=1280)
-    conf_manuel = st.sidebar.slider("Güven eşiği", 0.10, 0.90, 0.25, 0.05)
-    st.sidebar.caption("Küçük/uzak nesne varsa imgsz'yi artır. CPU'da büyük değer yavaştır.")
+    imgsz_manuel = st.sidebar.select_slider(T["imgsz"], [640, 960, 1280, 1920, 2560], value=1280)
+    conf_manuel = st.sidebar.slider(T["guven"], 0.10, 0.90, 0.25, 0.05)
+    st.sidebar.caption(T["manuel_cap"])
 
-mod = st.radio("Mod", ["📷 Görüntü", "🎬 Video (takip + sayma)"], horizontal=True)
+mod = st.radio(T["mod"], [T["mod_goruntu"], T["mod_video"]], horizontal=True)
 
 
 # --- GÖRÜNTÜ MODU ----------------------------------------------------------
-if mod == "📷 Görüntü":
+if mod == T["mod_goruntu"]:
     ornekler = sorted(ORNEK.glob("*.jpg")) if ORNEK.exists() else []
-    secim = st.selectbox("Örnek seç", ["(Kendi görüntümü yükle)"] + [p.name for p in ornekler])
-    dosya = st.file_uploader("veya bir görüntü yükle", type=["jpg", "jpeg", "png"])
+    secim = st.selectbox(T["ornek_sec"], [T["kendi_goruntu"]] + [p.name for p in ornekler])
+    dosya = st.file_uploader(T["goruntu_yukle"], type=["jpg", "jpeg", "png"])
 
     kaynak = None
     if dosya is not None:
         kaynak = Image.open(dosya).convert("RGB")
-    elif secim != "(Kendi görüntümü yükle)":
+    elif secim != T["kendi_goruntu"]:
         kaynak = Image.open(ORNEK / secim).convert("RGB")
 
     if kaynak is not None:
         goruntu = np.array(kaynak)
-        with st.spinner("Tespit ediliyor..."):
+        with st.spinner(T["tespit_spinner"]):
             if oto_ayar_ac:
                 imgsz_g, conf_g = en_iyi_imgsz_gorsel(goruntu), 0.25   # otomatik + cache'li
             else:
                 imgsz_g, conf_g = imgsz_manuel, conf_manuel     # elle
             r = model.predict(goruntu, conf=conf_g, imgsz=imgsz_g, verbose=False)[0]
-        st.caption(f"{'⚙️ Otomatik' if oto_ayar_ac else '✋ Manuel'} → çözünürlük {imgsz_g} · güven {conf_g}")
+        st.caption(T["ayar_cap"].format(lbl=T["oto_lbl"] if oto_ayar_ac else T["man_lbl"],
+                                        imgsz=imgsz_g, conf=conf_g))
         annotated = r.plot()[:, :, ::-1]  # BGR -> RGB
         c1, c2 = st.columns([3, 1])
         with c1:
-            st.image(annotated, caption="Tespit sonucu", use_container_width=True)
+            st.image(annotated, caption=T["tespit_sonuc"], use_container_width=True)
         with c2:
-            st.subheader("Sayım")
+            st.subheader(T["sayim"])
             sc = Counter(int(x) for x in r.boxes.cls.tolist())
-            st.metric("Toplam nesne", sum(sc.values()))
+            st.metric(T["toplam_nesne"], sum(sc.values()))
             for i, ad in enumerate(SINIFLAR):
                 st.write(f"{ad}: **{sc.get(i, 0)}**")
     else:
-        st.info("Bir örnek seç ya da görüntü yükle.")
+        st.info(T["ornek_ya_yukle"])
 
 
 # --- VIDEO MODU ------------------------------------------------------------
 else:
-    st.caption("Yukarıdan/açılı yol trafik videosu en iyi sonucu verir. "
-               "⚠️ CPU'da işlem birkaç dakika sürebilir.")
+    st.caption(T["video_cap"])
 
     ornek_vids = sorted(ORNEK_VID.glob("*.mp4")) if ORNEK_VID.exists() else []
-    vsecim = st.selectbox("Örnek video seç", ["(Kendi videomu yükle)"] + [p.name for p in ornek_vids])
-    vdosya = st.file_uploader("veya video yükle (mp4 / avi / mov)", type=["mp4", "avi", "mov"])
+    vsecim = st.selectbox(T["ornek_video_sec"], [T["kendi_video"]] + [p.name for p in ornek_vids])
+    vdosya = st.file_uploader(T["video_yukle"], type=["mp4", "avi", "mov"])
 
-    cizgi_acik = st.checkbox(
-        "Sayım çizgisi kullan", value=True,
-        help="Kapatırsan çizgi çizilmez; model sadece tespit + takip yapıp "
-             "benzersiz nesneleri sayar.")
+    cizgi_acik = st.checkbox(T["cizgi_kullan"], value=True, help=T["cizgi_kullan_help"])
 
     # video yolu (upload'i tek sefer diske yaz) + kimlik degisince cizgiyi sifirla
     video_yol, kimlik = None, None
     if vdosya is not None:
-        if vsecim != "(Kendi videomu yükle)":
-            st.caption("ℹ️ Hem örnek seçili hem video yüklü — **yüklenen video** kullanılıyor.")
+        if vsecim != T["kendi_video"]:
+            st.caption(T["iki_kaynak"])
         kimlik = f"upload:{vdosya.name}:{vdosya.size}"
         if st.session_state.get("vid_kimlik") != kimlik:
             eski = st.session_state.get("vid_yol")      # onceki upload'in temp'ini sil
@@ -252,7 +425,7 @@ else:
             tmp.close()
             st.session_state["vid_yol"] = tmp.name
         video_yol = st.session_state.get("vid_yol")
-    elif vsecim != "(Kendi videomu yükle)":
+    elif vsecim != T["kendi_video"]:
         kimlik = f"ornek:{vsecim}"
         video_yol = str(ORNEK_VID / vsecim)
 
@@ -267,12 +440,11 @@ else:
     imgsz_oto, conf_oto, kirp_oto = imgsz_manuel, conf_manuel, 0.0
     cizgi_oner = None
     if video_yol and oto_ayar_ac:
-        with st.spinner("Video analiz ediliyor..."):
+        with st.spinner(T["video_analiz"]):
             conf_oto, kirp_oto, cizgi_oner = oto_analiz(video_yol)
-        st.caption(f"⚙️ Otomatik → güven {conf_oto} · üst kırpma {kirp_oto} "
-                   "(çözünürlük İşle'ye basınca seçilir)")
+        st.caption(T["oto_video_cap"].format(conf=conf_oto, kirp=kirp_oto))
     elif video_yol:
-        st.caption(f"✋ Manuel → çözünürlük {imgsz_oto} · güven {conf_oto} (kırpma yok)")
+        st.caption(T["man_video_cap"].format(imgsz=imgsz_oto, conf=conf_oto))
 
     # --- Cizgi: varsayilan OTOMATIK; istege bagli elle ---
     cizgi = None   # (ax, ay, bx, by) 0-1 orani; None ise ortadan yatay
@@ -289,21 +461,17 @@ else:
                          (int(c[2] * disp_W), int(c[3] * disp_H)), (0, 0, 255), 3)
                 st.image(onp[:, :, ::-1], caption=altyazi, use_container_width=True)
 
-            oto = st.checkbox(
-                "Çizgiyi otomatik yerleştir (önerilen)", value=True,
-                help="En yoğun trafiğin olduğu yere yatay çizgi koyar. Kapatırsan "
-                     "çizgiyi elle koyabilirsin.")
+            oto = st.checkbox(T["cizgi_oto"], value=True, help=T["cizgi_oto_help"])
 
             if oto:
                 if cizgi_oner is None:      # manuel ayar modunda da cizgi istenebilir
-                    with st.spinner("En iyi çizgi konumu bulunuyor..."):
+                    with st.spinner(T["cizgi_bul"]):
                         _, _, cizgi_oner = oto_analiz(video_yol)
                 cizgi = cizgi_oner
-                onizle(cizgi, "Otomatik çizgi — istersen üstteki kutuyu kapatıp elle koy")
+                onizle(cizgi, T["cizgi_onizle"])
             elif TIKLA_VAR:
-                st.caption("👉 Kare üstünde **iki noktaya tıkla**: 1. başlangıç, 2. bitiş "
-                           "(yatay/dikey/eğik). Yeniden koymak için 🗑 Sıfırla.")
-                if st.button("🗑 Çizgiyi sıfırla"):
+                st.caption(T["tikla_cap"])
+                if st.button(T["sifirla"]):
                     st.session_state.pop("cizgi_noktalar", None)
                     st.session_state.pop("son_tik", None)
 
@@ -330,32 +498,29 @@ else:
                 if len(noktalar) == 2:
                     (ax, ay), (bx, by) = noktalar
                     cizgi = (ax / disp_W, ay / disp_H, bx / disp_W, by / disp_H)
-                    st.success("Çizgi ayarlandı ✔ — İşle'ye basabilirsin.")
+                    st.success(T["cizgi_ok"])
                 else:
-                    st.info(f"{len(noktalar)}/2 nokta seçildi. Seçmezsen ortadan yatay çizgi kullanılır.")
+                    st.info(T["nokta_bilgi"].format(n=len(noktalar)))
             else:
-                st.warning("Elle çizim için: `pip install streamlit-image-coordinates`. "
-                           "Şimdilik kaydırıcı kullanılıyor.")
-                yon = st.radio("Çizgi yönü", ["Yatay", "Dikey"], horizontal=True)
-                pos = st.slider("Çizgi konumu", 0.05, 0.95, 0.5, 0.01)
-                cizgi = (0.0, pos, 1.0, pos) if yon == "Yatay" else (pos, 0.0, pos, 1.0)
-                onizle(cizgi, "Önizleme")
+                st.warning(T["tikla_uyari"])
+                yon = st.radio(T["cizgi_yon"], [T["yatay"], T["dikey"]], horizontal=True)
+                pos = st.slider(T["cizgi_konum"], 0.05, 0.95, 0.5, 0.01)
+                cizgi = (0.0, pos, 1.0, pos) if yon == T["yatay"] else (pos, 0.0, pos, 1.0)
+                onizle(cizgi, T["onizleme"])
 
     if video_yol:
-        hiz = st.radio("İşleme hızı",
-                       ["🐇 Hızlı (2 karede 1) — önerilen", "🐢 Tam (her kare)",
-                        "⚡ Çok hızlı (3 karede 1)"], horizontal=True)
-        stride = 2 if "2 karede" in hiz else (3 if "3 karede" in hiz else 1)
-        st.caption("Kare atlama süreyi o oranda kısaltır; takip tamponu geniş olduğu "
-                   "için sayım doğruluğu pek etkilenmez.")
+        hiz_map = {T["hiz_hizli"]: 2, T["hiz_tam"]: 1, T["hiz_cok"]: 3}
+        hiz = st.radio(T["islem_hizi"], list(hiz_map), horizontal=True)
+        stride = hiz_map[hiz]
+        st.caption(T["hiz_cap"])
     else:
         stride = 1
 
-    if video_yol and st.button("▶ İşle ve say"):
+    if video_yol and st.button(T["isle"]):
         if oto_ayar_ac:
-            with st.spinner("En uygun çözünürlük seçiliyor (video başına bir kez)..."):
+            with st.spinner(T["imgsz_spinner"]):
                 imgsz_oto = oto_imgsz_video(video_yol)
-            st.caption(f"⚙️ Seçilen çözünürlük: {imgsz_oto}")
+            st.caption(T["secilen_imgsz"].format(imgsz=imgsz_oto))
         cap = cv2.VideoCapture(video_yol)
         fps = cap.get(cv2.CAP_PROP_FPS) or 25
         W, H = int(cap.get(3)), int(cap.get(4))
@@ -374,7 +539,7 @@ else:
             sinir = max(0, min(ay, by) - int(0.05 * H))
             if y0 > sinir:
                 y0 = sinir
-                st.caption(f"ℹ️ Üst kırpma, sayım çizgisi görünür kalsın diye {y0 / H:.2f} oranına çekildi.")
+                st.caption(T["kirp_bilgi"].format(oran=y0 / H))
 
         # cikti cozunurlugu: kaynagi koru (en fazla 1080p), cift boyut (H264 sart)
         oH = (min(H, 1080) // 2) * 2
@@ -388,7 +553,7 @@ else:
                 cikti_yol, fps=fps / stride, codec="libx264", macro_block_size=None,
                 pixelformat="yuv420p", output_params=["-crf", "20", "-preset", "medium"])
         except Exception as e:
-            st.error(f"Video yazıcı açılamadı (ffmpeg gerekli): `pip install imageio-ffmpeg`\n\n{e}")
+            st.error(T["yazici_hata"].format(e=e))
             st.stop()
 
         vmodel = YOLO(str(MODEL))        # taze tracker durumu
@@ -400,7 +565,7 @@ else:
         gorulen = defaultdict(set)       # benzersiz nesne (MIN_OMUR filtresiyle)
 
         FONT = cv2.FONT_HERSHEY_SIMPLEX
-        prog = st.progress(0.0, text="İşleniyor... (sonuç işlem bitince gösterilecek)")
+        prog = st.progress(0.0, text=T["progress_ilk"])
         islenecek = (N // stride) if N > 0 else 0   # N=0: bozuk metadata olabilir
         yon1 = yon2 = 0                              # cizgi gecis yonleri
         t0 = time.time()
@@ -448,16 +613,16 @@ else:
             toplam_t = sum(len(v) for v in gorulen.values())
             if cizgi_acik:
                 cv2.rectangle(frame, (0, 0), (380, 190), (0, 0, 0), -1)
-                cv2.putText(frame, f"GECEN: {gecen_t} ({yon1}|{yon2})", (10, 34),
+                cv2.putText(frame, f"{T['ov_gecen']}: {gecen_t} ({yon1}|{yon2})", (10, 34),
                             FONT, 0.9, (60, 60, 255), 2)
-                cv2.putText(frame, f"TOPLAM: {toplam_t}", (10, 68), FONT, 0.9, (255, 255, 255), 2)
+                cv2.putText(frame, f"{T['ov_toplam']}: {toplam_t}", (10, 68), FONT, 0.9, (255, 255, 255), 2)
                 for i, ad in enumerate(SINIFLAR):
                     cv2.putText(frame, f"{ad}: {gecen[i]} / {len(gorulen[i])}",
                                 (10, 98 + i * 17), FONT, 0.5, RENK[i], 1)
-                cv2.putText(frame, "(gecen / toplam)", (10, 185), FONT, 0.4, (180, 180, 180), 1)
+                cv2.putText(frame, T["ov_alt"], (10, 185), FONT, 0.4, (180, 180, 180), 1)
             else:
                 cv2.rectangle(frame, (0, 0), (330, 150), (0, 0, 0), -1)
-                cv2.putText(frame, f"TOPLAM: {toplam_t}", (10, 38), FONT, 1.0, (255, 255, 255), 2)
+                cv2.putText(frame, f"{T['ov_toplam']}: {toplam_t}", (10, 38), FONT, 1.0, (255, 255, 255), 2)
                 for i, ad in enumerate(SINIFLAR):
                     cv2.putText(frame, f"{ad}: {len(gorulen[i])}", (10, 72 + i * 16),
                                 FONT, 0.5, RENK[i], 2)
@@ -469,9 +634,9 @@ else:
                 gecti = time.time() - t0
                 kalan = int(gecti / islenen * (islenecek - islenen))
                 prog.progress(min(islenen / islenecek, 1.0),
-                              text=f"İşleniyor... {islenen}/{islenecek} kare · kalan ~{kalan} sn")
+                              text=T["progress"].format(i=islenen, n=islenecek, k=kalan))
             else:   # kare sayisi bilinmiyor (bozuk metadata) — yine de ilerledigi gorunsun
-                prog.progress(0.0, text=f"İşleniyor... {islenen}. kare (toplam bilinmiyor)")
+                prog.progress(0.0, text=T["progress_belirsiz"].format(i=islenen))
 
             # aradaki kareleri decode etmeden atla (grab, read'den cok daha ucuz)
             for _ in range(stride - 1):
@@ -480,7 +645,7 @@ else:
 
         cap.release()
         writer.close()
-        prog.progress(1.0, text="Bitti")
+        prog.progress(1.0, text=T["bitti"])
 
         # sonucu session_state'e yaz: indirme tiklamak gibi her etkilesim scripti
         # bastan kosturur (rerun); buton blogu icinde kalsaydi sonuc kaybolurdu
@@ -498,26 +663,26 @@ else:
         gecen_t = sum(snc["gecen"].values())
         toplam_t = sum(snc["gorulen"].values())
         if snc["cizgi_acik"]:
-            st.success(f"✅ Çizgiden geçen: {gecen_t}  ·  Görülen toplam (benzersiz): {toplam_t}")
-            st.markdown("**Çizgiden geçen**")
+            st.success(T["sonuc_cizgi"].format(g=gecen_t, t=toplam_t))
+            st.markdown(T["gecen_md"])
             cols = st.columns(6)
-            cols[0].metric("Geçen", gecen_t)
+            cols[0].metric(T["gecen_lbl"], gecen_t)
             for i, ad in enumerate(SINIFLAR):
                 cols[i + 1].metric(ad, snc["gecen"][i])
             y1, y2 = snc.get("yon", (0, 0))
-            st.caption(f"↕ Yön ayrımı: bir yönden **{y1}** · karşı yönden **{y2}**")
-            st.markdown("**Toplam görülen (benzersiz)**")
+            st.caption(T["yon_cap"].format(y1=y1, y2=y2))
+            st.markdown(T["toplam_md"])
             cols = st.columns(6)
-            cols[0].metric("Toplam", toplam_t)
+            cols[0].metric(T["toplam_lbl"], toplam_t)
             for i, ad in enumerate(SINIFLAR):
                 cols[i + 1].metric(ad, snc["gorulen"][i])
         else:
-            st.success(f"✅ Toplam görülen (benzersiz): {toplam_t}")
+            st.success(T["sonuc_toplam"].format(t=toplam_t))
             cols = st.columns(6)
-            cols[0].metric("Toplam", toplam_t)
+            cols[0].metric(T["toplam_lbl"], toplam_t)
             for i, ad in enumerate(SINIFLAR):
                 cols[i + 1].metric(ad, snc["gorulen"][i])
 
         st.video(snc["cikti_yol"])
         with open(snc["cikti_yol"], "rb") as f:
-            st.download_button("📥 Sonuç videosunu indir", f, "sonuc_sayim.mp4", "video/mp4")
+            st.download_button(T["indir"], f, "sonuc_sayim.mp4", "video/mp4")

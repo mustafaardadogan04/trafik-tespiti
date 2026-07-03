@@ -1,8 +1,8 @@
 # Trafik Nesne Tespiti + Sayma
 
-> 🇬🇧 **English summary** — Traffic object detection and counting: YOLOv8s trained on a custom ~18k-image multi-angle dataset (street CCTV + a MIO-TCD subset), ByteTrack tracking, and a Streamlit demo with automatic tuning (confidence threshold, sky cropping, counting-line placement) plus direction-aware line-crossing counts. Validation mAP50 0.929. Portfolio/learning project.
+> 🇬🇧 **English summary** — Traffic object detection and counting: YOLOv8s trained on a custom ~18k-image multi-angle dataset (street CCTV + a MIO-TCD subset), ByteTrack tracking, and a Streamlit demo with automatic tuning (confidence threshold, sky cropping, counting-line placement) plus direction-aware line-crossing counts; bilingual (TR/EN) UI. Validation mAP50 0.929. Portfolio/learning project.
 
-Trafik görüntülerinde/videolarında araç ve yaya tespiti yapan, videoda araçları takip edip **sayan** bir bilgisayarlı görü projesi. YOLOv8 ile eğitildi, ByteTrack ile takip ediyor, Streamlit ile demo arayüzü var.
+Trafik görüntülerinde/videolarında araç ve yaya tespiti yapan, videoda araçları takip edip **sayan** bir bilgisayarlı görü projesi. YOLOv8 ile eğitildi, ByteTrack ile takip ediyor, Streamlit ile demo arayüzü var (Türkçe/İngilizce).
 
 Sınıflar: `bicycle, bus, car, motorbike, person`. Öğrenme amaçlı bir portföy projesi.
 
@@ -70,14 +70,11 @@ Sınıflar arasında en güçlüsü `bus`, en zayıfı `person` çıktı — seb
 3_mio_donustur.py      MIO-TCD -> YOLO format dönüştürücü (dengeli alt küme seçer)
 4_birlestir.py         iki veri setini tek YOLO veri setinde birleştirir
 5_genel_egitim.py      asıl modelin eğitimi — YOLOv8s, 40 epoch (Kaggle)
-6_takip_sayma.py       komut satırı takip + sayma (ilk sürüm — basit yatay çizgi)
-7_demo.py              Streamlit demo (görüntü + video, tüm gelişmiş özellikler)
+6_demo.py              Streamlit demo (görüntü + video; Türkçe/İngilizce arayüz)
 bytetrack_takip.yaml   ayarlı ByteTrack konfigürasyonu
 ornekler/              demo için örnek görüntüler
 ciktilar/              örnek çıktılar ve eğitim kanıtları (README görselleri)
 ```
-
-Not: `6_takip_sayma.py` projenin ilk sayım denemesidir ve basit yatay-çizgi mantığını kullanır; gelişmiş sayım (parça kesişimi, yön ayrımı, ömür filtresi) `7_demo.py`'dedir.
 
 Veri hazırlama scriptleri yolları argümanla alır, örneğin:
 
@@ -91,7 +88,7 @@ python 4_birlestir.py --archive <archive> --mio mio_yolo --cikti birlesik
 
 ```bash
 pip install -r requirements.txt
-streamlit run 7_demo.py
+streamlit run 6_demo.py
 ```
 
 Model ağırlığı (`genel_best.pt`, ~22 MB) repoda değil, [GitHub Release'te](https://github.com/mustafaardadogan04/trafik-tespiti/releases) — demo ilk çalıştırmada otomatik indirir, senin bir şey yapman gerekmez. Veri setleri de repoya konmadı (kaynaklar yukarıda); model `5_genel_egitim.py` ile yeniden eğitilebilir.
