@@ -5,7 +5,8 @@
 ultralytics          # YOLOv8 + ByteTrack
 
 # Goruntu / video isleme
-opencv-python
+# headless: sunucuda GUI/sistem kutuphanesi (libGL vb.) gerektirmez — Streamlit Cloud icin
+opencv-python-headless
 numpy
 Pillow
 imageio
