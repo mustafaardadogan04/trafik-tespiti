@@ -2,6 +2,8 @@
 
 ### 🚀 [Canlı demo](https://trafik-tespiti-rdbi4prydl6bcobmwgxljv.streamlit.app/) · Streamlit Cloud
 
+> ⏳ *İlk açılışta model indirilir (~22 MB) ve uygulama uykudaysa uyanması gerekir; işlem CPU'da yapıldığı için (özellikle video) biraz sürebilir — sabırlı ol.*
+
 > 🇬🇧 **English summary** — Traffic object detection and counting: YOLOv8s trained on a custom ~18k-image multi-angle dataset (street CCTV + a MIO-TCD subset), ByteTrack tracking, and a Streamlit demo with automatic tuning (confidence threshold, sky cropping, counting-line placement) plus direction-aware line-crossing counts; bilingual (TR/EN) UI. Validation mAP50 0.929. Portfolio/learning project.
 
 Trafik görüntülerinde/videolarında araç ve yaya tespiti yapan, videoda araçları takip edip **sayan** bir bilgisayarlı görü projesi. YOLOv8 ile eğitildi, ByteTrack ile takip ediyor, Streamlit ile demo arayüzü var (Türkçe/İngilizce).
