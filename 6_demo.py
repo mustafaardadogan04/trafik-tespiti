@@ -57,6 +57,8 @@ METIN = {
         "baslik": "🚦 Trafik Nesne Tespiti + Sayma",
         "alt": "YOLOv8 · çok-açılı veriyle (MIO-TCD + Street View, ~18k görüntü) eğitildi. "
                "Sınıflar: bicycle, bus, car, motorbike, person.",
+        "yukleme_notu": "ℹ️ İlk açılışta model indirilir (~22 MB), birkaç saniye sürebilir. "
+                        "İşlem CPU'da yapıldığı için özellikle video biraz yavaştır — sabırlı ol.",
         "model_hata": "Model yüklenemedi ve otomatik indirme başarısız oldu — internet "
                       "bağlantısını kontrol et. Elle kurulum: [`genel_best.pt`]({url}) "
                       "dosyasını indirip `model/` klasörüne koy.",
@@ -143,6 +145,8 @@ METIN = {
         "baslik": "🚦 Traffic Object Detection + Counting",
         "alt": "YOLOv8 · trained on a multi-angle dataset (MIO-TCD + Street View, ~18k images). "
                "Classes: bicycle, bus, car, motorbike, person.",
+        "yukleme_notu": "ℹ️ On first load the model is downloaded (~22 MB), which can take a few "
+                        "seconds. Inference runs on CPU, so video is a bit slow — please be patient.",
         "model_hata": "Model could not be loaded and auto-download failed — check your "
                       "internet connection. Manual setup: download [`genel_best.pt`]({url}) "
                       "and place it in the `model/` folder.",
@@ -341,6 +345,7 @@ T = METIN["tr" if dil == "Türkçe" else "en"]
 
 st.title(T["baslik"])
 st.caption(T["alt"])
+st.caption(T["yukleme_notu"])
 
 model = model_yukle()
 if model is None:
