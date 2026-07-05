@@ -3,6 +3,7 @@
 
 # Tespit + takip
 ultralytics          # YOLOv8 + ByteTrack
+lapx                 # ByteTrack takibi icin 'lap' modulunu saglar (hazir wheel; bulut icin)
 
 # Goruntu / video isleme
 # headless: sunucuda GUI/sistem kutuphanesi (libGL vb.) gerektirmez — Streamlit Cloud icin
