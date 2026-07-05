@@ -49,7 +49,7 @@ ORNEK = KOK / "ornekler"
 ORNEK_VID = KOK / "ornek_videolar"
 # ornek videolar da repoda degil, Release'ten iner (buyuk dosya). Adlar Release'teki
 # asset adlariyla birebir olmali.
-ORNEK_VIDEO_ADLARI = ["kavsak.mp4", "vietnam_yol.mp4", "sokak.mp4"]
+ORNEK_VIDEO_ADLARI = ["karayolu.mp4", "trafik2.mp4", "vietnam_yol.mp4"]
 SINIFLAR = ["bicycle", "bus", "car", "motorbike", "person"]
 RENK = {0: (230, 80, 80), 1: (30, 120, 230), 2: (230, 150, 30),
         3: (30, 200, 120), 4: (180, 80, 230)}  # BGR
@@ -250,21 +250,19 @@ def model_yukle():
     return YOLO(str(MODEL))
 
 
-@st.cache_resource
-def ornek_videolar_indir():
-    # ornek videolar repoda degil; ilk kez Release'ten indirilir (yoksa sessizce atlanir)
+def ornek_video_indir(ad):
+    # secilen ornek videoyu (repoda yok) Release'ten indirir; varsa tekrar inmez.
     ORNEK_VID.mkdir(exist_ok=True)
-    eksik = [a for a in ORNEK_VIDEO_ADLARI if not (ORNEK_VID / a).exists()]
-    if eksik:
-        with st.spinner("Örnek videolar indiriliyor / downloading..."):
-            for ad in eksik:
-                hedef = ORNEK_VID / ad
-                try:
-                    urllib.request.urlretrieve(RELEASE_TABAN + ad, hedef)
-                except Exception:
-                    if hedef.exists():
-                        hedef.unlink()   # yarim/bulunamayan dosyayi birakma
-    return True
+    hedef = ORNEK_VID / ad
+    if not hedef.exists():
+        with st.spinner(f"Örnek video indiriliyor / downloading: {ad}..."):
+            try:
+                urllib.request.urlretrieve(RELEASE_TABAN + ad, hedef)
+            except Exception:
+                if hedef.exists():
+                    hedef.unlink()   # yarim/bulunamayan dosyayi birakma
+                return None
+    return hedef if hedef.exists() else None
 
 
 @st.cache_data(show_spinner=False)
@@ -426,9 +424,8 @@ if mod == T["mod_goruntu"]:
 else:
     st.caption(T["video_cap"])
 
-    ornek_videolar_indir()   # ornekleri ilk kez Release'ten indir (yoksa sessiz atlar)
-    ornek_vids = sorted(ORNEK_VID.glob("*.mp4")) if ORNEK_VID.exists() else []
-    vsecim = st.selectbox(T["ornek_video_sec"], [T["kendi_video"]] + [p.name for p in ornek_vids])
+    # ornek videolar repoda degil; secilen video Release'ten indirilir (asagida)
+    vsecim = st.selectbox(T["ornek_video_sec"], [T["kendi_video"]] + ORNEK_VIDEO_ADLARI)
     vdosya = st.file_uploader(T["video_yukle"], type=["mp4", "avi", "mov"])
 
     cizgi_acik = st.checkbox(T["cizgi_kullan"], value=True, help=T["cizgi_kullan_help"])
@@ -453,7 +450,10 @@ else:
         video_yol = st.session_state.get("vid_yol")
     elif vsecim != T["kendi_video"]:
         kimlik = f"ornek:{vsecim}"
-        video_yol = str(ORNEK_VID / vsecim)
+        indi = ornek_video_indir(vsecim)          # yalnizca secilen videoyu indir
+        video_yol = str(indi) if indi else None
+        if indi is None:
+            st.warning("Bu örnek video indirilemedi (Release'te bulunamadı).")
 
     if kimlik and st.session_state.get("vid_kimlik") != kimlik:
         st.session_state["vid_kimlik"] = kimlik
